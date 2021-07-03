@@ -1,5 +1,5 @@
 ---
-title:  "Using wireshark, ssh and tcpdum to capture ethernet package remotely"
+title:  "Using wireshark and sshdump to capture ethernet packets remotely"
 categories:
    - Engineering
 tags:
