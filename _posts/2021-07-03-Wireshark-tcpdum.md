@@ -44,6 +44,7 @@ Just specify as usual, change or leave it blank to fit your setup.
 ### Step 3: Specify the interface in the remote machine (this case is interface of my Espressobin).
 The only required field is the interface and the checked box **"Use sudo on the remote machine"**. I would like to make a note about this, from my experience, it is likely that we should use the sudo to run *tcpdump* on the OpenWRT, because it there is not easy way to run tcpdump without root access. However, it is not the problem itself because we can set that the user can run sudo without password with for only *tcpdump*. Please refer to the following image.
 <img src="https://drive.rtos.dev/f/48ecde620d794b9bbd96/?raw=1" alt="drawing" width="500"/>
+<br>
 We should leave the *"Remote capture command"* to be blank as well, as ssh dump has handled this automatically, unless you have a specific need to specify the command. Then we can press start now.
 
 ### And finally, voila.....
