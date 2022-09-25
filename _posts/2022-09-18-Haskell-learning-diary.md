@@ -1,6 +1,5 @@
 ---
-
-title:  "Learning haskell diary"
+title:  "Learning haskell diary (day zero)"
 categories:
 
 - Engineering
@@ -12,6 +11,7 @@ categories:
 
 {:.text-justify}
 This post is just my personal note when I learn haskell. It started on 2020 during COVID quarantine period. I have suspended it for a bit then start over again. This diary is based on [Yann's writting](https://yannesposito.com/Scratch/en/blog/Haskell-the-Hard-Way/#navigation).
+{: .notice--info}
 
 # Some basic **NEW** concept
 
@@ -33,8 +33,6 @@ f x y = (x*x) + (y*y)
 It is close with function in algebra. That is function is some transformation from the input to output. That is, no parentheses, no return statement. The first line  descripte the type of the function that `f` is a function return `Int` and take 2 `Int` arguments. Pretty neat! However, Haskell doesn't have function with 2 arguments, the first line of code mean `f` is a function that take `Int` arugment and convert it to a function convert from `Int` to `Int` type. **Mind blowing?** Yes, I do. I dont know either.
 
 The type declaration is just a way to limit what `f` can take. It is not necessary to define the type restriction there since haskell would decide which is the best type to use for `f`, otherwise, we need to defines different function for different argument type.
-
-
 
 ## Some notation
 
@@ -166,7 +164,7 @@ And my brain is dumbed now. I wil  try to explain it to myself (like having a du
 
 * It iterates until the end of the list.
 
-At this point Yann have introduce the lambda expression at in finest.the the function can be rewriten by the following.
+At this point Yann have introduce the lambda expression at in his finest example, the function can be rewriten by the following.
 
 ```haskell
 aln4_check x = if x`mod`4 == 0 then True else False
@@ -177,4 +175,6 @@ sum_align4_v4 list = foldl (+) 0 (filter  aln4_check list)
 
 ```
 
+Obviously, the keypoint here is that we reduce bunch of line by oneliner, but it emboid the high level function that work on the data series, which looks similar to math, this make the code clean (in the sense that the code is self documented as it looks closed to the mathenmatic function).
 
+Here I am finish first day here, I don't have much time to learn so I learn it one day per week. Next week, 
