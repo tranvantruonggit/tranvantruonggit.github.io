@@ -1,4 +1,5 @@
 ---
+
 title:  "Learning haskell diary (day zero)"
 categories:
 
@@ -177,4 +178,4 @@ sum_align4_v4 list = foldl (+) 0 (filter  aln4_check list)
 
 Obviously, the keypoint here is that we reduce bunch of line by oneliner, but it emboid the high level function that work on the data series, which looks similar to math, this make the code clean (in the sense that the code is self documented as it looks closed to the mathenmatic function).
 
-Here I am finish first day here, I don't have much time to learn so I learn it one day per week. Next week, 
+Here I am finish first day here, I don't have much time to learn so I learn it one day per week. Next week, I will make some exercise myself to grasp the knowldege I learn today.
