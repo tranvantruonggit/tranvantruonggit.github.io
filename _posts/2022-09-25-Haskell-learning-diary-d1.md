@@ -1,14 +1,11 @@
 ---
 title:  "Learning haskell diary (day #1)"
 categories:
-
-- Engineering
-  tags:
-- Learning
-- Haskell
-
+   - Engineering
+tags:
+   - Learning
+   - Haskell
 ---
-
 {:.text-justify}
 Theses postt is just my personal note when I learn haskell. It started on 2020 during COVID quarantine period. I have suspended it for a bit then start over again. This diary is based on [Yann's writting](https://yannesposito.com/Scratch/en/blog/Haskell-the-Hard-Way/#navigation).
 {: .notice--info}
