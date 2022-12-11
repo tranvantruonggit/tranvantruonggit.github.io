@@ -1,5 +1,5 @@
 ---
-title:  "Learning haskell diary (day #4). Performance evalutation (part 1)"
+title:  "Learning haskell diary (day #5). Performance evalutation (part 1)"
 categories:
    - Engineering
 tags:
@@ -164,7 +164,5 @@ extern uint32_t thk_tstb( uint32_t val, uint8_t pos);
 ```
 
 And by doing this to replace the xor/and/or/left-shift/right-shift I wrote in haskell in the previous day, I see the huge jump in the performance point of view, something like 2MB CRC calculation in the degree of second (3-5 seconds). Obviously, I see that it cannot beat the implementation of other off-the-shelf application I tried on windows (`srec_cat`  for your reference, this is the [home page](https://srecord.sourceforge.net/) of that project ).
-
-
 
 *It seems this post take forever, so I will cutting it into 2 part, part 2 will include the benchmark tabular report .*
