@@ -22,17 +22,29 @@ Obviously, as an machine under the hood, chating with it is not something like t
 
 One think I was always wanna do but hate to learn is the GUI, like [Linus Tovard spoke in TED session with Chris Anderson](https://www.ted.com/talks/linus_torvalds_the_mind_behind_linux). Then, I have asked the bot to generate the code of simple GUI program (adder of 2 input numbers). As first, to be frank, I am scared of what it can do, it provide the initial version, then I complain, and it provides the revised version, and it did excellence for several round. The fololwing is the simplified *conversation* between myself and the bot.
 
-```
-
-```
-
 # Well it is really terifying, but in the end, it is just the massive if-else, isn't it
 
-I am a fool, I am always think of the neural-network works like the massive if-else mesh. After couple of hours 
+I am a fool, I am always think of the neural-network works like the massive if-else mesh. After couple of hours playing with in, I am convinced about the capabliity of the context in generated
 
-# What we should propare as an engineer?
+* My goal is to make an salary calculator in python with GUI:
+  
+  * I wanna learn a bit of the GUI in python so I asked the bot to generate the simple GUI app, with some input textbox and one calculate button. I copied the python code it gen and run it run pretty well.
+  
+  * I see the font is quite small, so I asked chatbot to increase the font size. Well It remembers the previous code and it generates the code to change the font size. Moreover, it also explains to me the code like a teacher, cool huh? I like it.
+  
+  * Tweaking my questions some more rounds, and it performs like an expert in python. The content it generates having the consideration of the whole discussion, not just the dry ass Q&A.
+  
+  * However, when it comes to some bugy code it generates, I copied the error to the chat box to challenge our bot. It started to behaves like a junior, haha. I have tried to simplify my question, it seems to help a bit, but it cannot hide the fact that the code it generate is not from itself but the mix of some unknow expert in stackoverflow (haha).
 
+* Actually, my plan of learning haskell is abit behind the schedule, because I am so stupid to understand the monoid, monad, `May be`,... So I would like to check if it can be my mentor during the learning. So was asking the following question.
+  
+  * In the ELI5, what is the functor in category theory. The following image is the outcome. Impressive huh?
+    ![](https://link.storjshare.io/s/jub7qbaczwd2auzjhhfafxwbvx3q/imagehosting/GPTLearn1.png?wrap=0)
+    ![](https://link.storjshare.io/s/jv4usgfd7ohb6hvp2mujuolen3nq/imagehosting/GPTlearn2.png?wrap=0)
 
+# What we should prepare as an engineer?
+
+For me, with above 2 simples example, the chat bot like GPT really awesome to the point that would put some pressure on us, chat GPT seems to to compete with us, the engineer in these tedious job (like implement some low complex requirements). That may not immediately affect our job now, but the junior engineer would be in the difficult market now. Frankly, if I was able to use my 2 hours of engineering to tell the GPT to make some simple app, which may take a whole week or more of a junior, I would prefer worknig with chat GPT (I hate working with human haha).  
 
 # Personal verdict?
 
