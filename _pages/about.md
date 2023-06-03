@@ -2,6 +2,7 @@
 permalink: /about/
 title: "About me"
 ---
+![](https://link.storjshare.io/s/jx4or7s76d7p7epej3ojz5fyvwsq/imagehosting/PoseSQuare.jpg?wrap=0)
 Hello there! I'm an engineer based in HCMC with a passion for technology and engineering. I'm constantly fascinated by how things work and why they are designed or engineered in certain ways. Blogging has been a great outlet for me since the COVID year of 2019, allowing me to improve my writing skills and document my thoughts along the way.
 
 # Profession
