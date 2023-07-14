@@ -1,109 +1,106 @@
 ---
-title:  "Learning haskell diary (part #6): category theory, Maybe, Just, Nothing and Monad"
+title: "Learning Haskell Diary (Part #6): Category Theory, Maybe, Just, Nothing, and Monad"
 categories:
-   - Engineering
+  - Engineering
 tags:
-   - Learning
-   - Haskell
-   - Category theory
-   - Functional programming
+  - Learning
+  - Haskell
+  - Category theory
+  - Functional programming
 ---
 
-# Recap after half year
+# Recap After Half a Year
 
-Been learing haskell intensively from last year, starting with some fundamental knowledge about caterogy theory. I am stuck with the understanding of the functor, monad. So I started to investigating about the **Category Theory**. Thankfully, I have found a youtube channel of the Dr. Bartosz Milewski which has series of lecture videos about Category Theory for programmer, I have been interested in some concept of it. Moreover, learing about category theory provides me some new perspective about programming I have been doing for years. It makes me think about my quality of works, about the potential bug I may have been make in my code (because the nature of imperative language).
+Been learning Haskell intensively from last year, starting with some fundamental knowledge about category theory. I have been exploring the concepts of functors and monads, particularly focusing on understanding category theory. To aid in my learning journey, I came across a valuable resource: Dr. Bartosz Milewski's YouTube channel. His series of lecture videos on Category Theory for programmers have been immensely helpful. They have not only piqued my interest but also provided me with new perspectives on the programming work I have been doing for years, making me contemplate the quality of my code and the potential bugs that may arise due to the imperative nature of certain languages.
 
-# Some idea of the Category theory
+# Some Ideas from Category Theory
 
-## Another way of the abstraction
+## Another Way of Abstraction
 
-Being introduce to category theory as a mean of abstracting things. In the category theory, things are represented by dots (objects) and arrows (morphism). The category shall fulfill the following characteristic:
+Category theory introduces a novel approach to abstraction. It represents things as dots (objects) and arrows (morphisms). A category should exhibit the following characteristics:
 
-* Identity operation: is the morphism from one object to itself. `id x = x`
-* composition: applying morphism `f` from `a` to be `b`, then morphism `g` from `b` to `c`. We have the new morphism `g . f` (called g after f) that `g . f = a -> c`.
+- Identity operation: This morphism maps an object to itself. `id x = x`
+- Composition: When applying morphism `f` from object `a` to object `b`, and then morphism `g` from object `b` to object `c`, the resulting morphism `g . f` (called g after f) should satisfy `g . f = a -> c`.
 
-# Example(s) of using category theory to abstract common mathernmatic characteristic.
+# Example(s) of Using Category Theory to Abstract Common Mathematical Characteristics
 
-These are just my understanding, it is not necessarily perfectly correct to the theory, but it is how I view the topic.
+These are my own interpretations, which may not perfectly align with the theory, but they demonstrate how I perceive the topic.
 
-### The adder and number zero, and/or the multiplier and number 1.
+### The Adder and Number Zero, and/or the Multiplier and Number One
 
-Those the adder and multiplier is different operations that we have learnt when we was a kind, the abstraction of the mathermatic find the similarity of these 2 operation, here I used the sumbol `^` to denote the operator:
+Although addition and multiplication are distinct operations we learn as children, mathematical abstraction reveals similarities between the two. I use the symbol `^` to represent the operator:
 
-* The composition `(a^b)^c = a^(b^c)`
-* Commutative `a^b = b^a`
-* It has one identity element `I` such tha for every number, the operation `x ^ I = I ^ x = x` .
-* For every operation f, g in set M, the composition `f x g` is in set M as well.
-  Then we will see that for adder, all above characteristic fulfill with the number zero. Similarly, the multiplication with number 1 also fulfill. The category theory address these kind of special characteristic in the much more abstracted way. This is called monoid in category theory and it can be described as a diagram like below (image from wikipedia):
-  ![](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Monoid_unit_svg.svg/726px-Monoid_unit_svg.svg.png)
-  Looking at the diagram, ... well at the moment I feel as a dump person. However, after watching [Dr. Bartozs's lecture on the monoid](https://www.youtube.com/watch?v=GmgoPd7VQ9Q), I think I can understand now.
-  In general, the monoid is defined in the category with the following morphism:
-* $\mu$ : M ⊗ M -> M . This is called the multiplication or binary operator, which maps a pair of object of the same type to the object of the same type
-* $\eta$: I -> M . I is unit. and ... honestly I don't quite understand this, but I can just accepts it for the time being (I am still finding the answer)
-  Then, for this caterogy, we have the following characteristic:
-* Multiplication: morphisim of a pair of object to an object. For instance, the multiplication of 2 real numbers is a real number.
-* Associative: let's say, we have $\mu$ ($\mu$(x,y),z) = $\mu$ (x,$\mu$(y,z)). For instance, the associative of real number multiplication.
-* Identitty: we will have $\mu$ ($\eta$ (I), x) = $\mu$ (x,$\eta$ (I)) = x, it is called left identity and right identity. Donoted by $\lambda$ and $\rho$ in above diagram. For eg: it is the number **1** in the multiplication.
+- Composition: `(a^b)^c = a^(b^c)`
+- Commutative property: `a^b = b^a`
+- Identity element: `I` is the identity element, ensuring that for every number, the operation `x ^ I = I ^ x = x`.
+- For every operation `f` and `g` in set M, the composition `f x g` is also in set M.
 
-## And then the Monad
+We observe that these characteristics align with the number zero for addition and the number one for multiplication. Category theory addresses such special characteristics in a more abstract manner, referring to them as monoids. The diagram below (image from Wikipedia) depicts a monoid:
+![Monoid diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Monoid_unit_svg.svg/726px-Monoid_unit_svg.svg.png)
 
-WHAT, MONAD? another new term. I have been struggling to grasp the most **fancy** concept of the Haskell and Category theory, in fact, I have been stopping practicing the haskell code to read and watch numberous of article and video to get the idea, and I need to throw out the category from my head to understand the monad in the imperative aspect.
-Let's say Haskell is a pure functional language, which means all of it function is pure, they don't change the state variable, they don't cause side effect. Then what is the point of making the function that doesn't cause any side effect such as writing to file, sending the data over internet... and of course, modify an register (haha, I am an embedded software engineer). Now, we will need to understanding that why pure function is important in functional programming? You know, in haskell, we don't have something like `count = count+1` because it violates prinicple of the math universe.
-![https://link.storjshare.io/s/jug25lvteqn3jo4f6ns7kbyocx7a/imagehosting/photo_2023-07-08_14-48-48.jpg?wrap=0](https://link.storjshare.io/s/jug25lvteqn3jo4f6ns7kbyocx7a/imagehosting/photo_2023-07-08_14-48-48.jpg?wrap=0)
-If the function is impure, the lazy evaluation collapse, thus it will be very inefficient to do the function composition and also the eta reduction.
+Initially, this diagram might appear overwhelming, but after watching [Dr. Bartosz's lecture on monoids](https://www.youtube.com/watch?v=GmgoPd7VQ9Q), I gained a better understanding. In general, a monoid is defined within a category with the following morphisms:
+- $\mu$: M ⊗ M -> M. This represents multiplication or the binary operator, mapping a pair of objects of the same type to an object of the same type.
+- $\eta$: I -> M. Here, I denotes the unit. Although I haven't fully grasped this concept yet, I accept it for the time being and continue my search for answers.
 
-Let me take an example how we can use monad, I don't explain what the monad is for the moment. This explaination is inspired by [Ertugrul Söylemez blog post](https://web.archive.org/web/20120114225257/http://ertes.de/articles/monads.html).
+For this particular category, the following characteristics hold:
+- Multiplication: Morphism of a pair of objects to an object. For example, the multiplication of two real numbers yields a real number.
+- Associativity: Suppose we have $\mu$ ($\mu$(x,y),z) = $\mu$ (x,$\mu$(y,z)). This equation represents the associativity of real number multiplication.
+- Identity: We have $\mu$ ($\eta$ (I), x) = $\mu$ (x,$\eta$ (I)) = x, denoted as left identity and right identity ($\lambda$ and $\rho$) in the diagram. For instance, in multiplication, the number **1** serves as the identity element.
 
-Say we implement the integer sqrt function which take an interger and return the square root of the input. This function will be represent like the following figure.
+## And Then the Monad
 
-![](https://link.storjshare.io/s/jvlinhdvoxzdbzeatmgph6gsidrq/blogimage/monad/i_sqrt.png?wrap=0)
+Monad? Another new term. I have been struggling to grasp the most fascinating concept of Haskell and Category theory. In fact, I even paused my Haskell coding practice to read and watch numerous articles and videos to gain a better understanding. However, I needed to set aside the concept of category theory temporarily to comprehend monads from an imperative perspective.
 
-As you know the limitation of this function is that it can return only numeric value, we say number 17 doesn't have the integer root. Then how can we solve this problem? Well, in C we solve this problem by providing the function that return the validity of the result via another *pass by reference* variable. Let's see in the below figure.
+Let's consider Haskell, a pure functional language where functions are pure and do not modify state variables or cause side effects such as writing to files, sending data over the internet, or altering registers (I happen to be an embedded software engineer). At this point, a question arises: Why are pure functions essential in functional programming? In Haskell, we do not have expressions like `count = count+1` because they violate the principles of the mathematical universe. Impure functions lead to the collapse of lazy evaluation, thus rendering function composition and eta reduction are inefficient.
+![Lazy evaluation collapse](https://link.storjshare.io/s/jug25lvteqn3jo4f6ns7kbyocx7a/imagehosting/photo_2023-07-08_14-48-48.jpg?wrap=0)
 
-![](https://link.storjshare.io/s/jxikev6oeihdtbjhlokyensc4erq/blogimage/monad/safesqrt.png?wrap=0)
 
-The obviously problem with this function is that it is impure, as global variable point by pRet being modified! Then what is the point? Why do even need the pureness of the Haskell if it cannot make my life easier? Well, let's say, if we want to make a function that find the possitive fourth root, it is easily to know that :
-$$\sqrt[4]{x} = \sqrt{\sqrt{x}} $$
+Allow me to provide an example illustrating the use of monads. I will not delve into the definition of a monad for now. This explanation draws inspiration from [Ertugrul Söylemez's blog post](https://web.archive.org/web/20120114225257/http://ertes.de/articles/monads.html).
 
-then we can implement the fourth root of an integer by the function in the following block diagram.
+Let's assume we implement an integer square root function that takes an integer and returns its square root. We can represent this function as shown in the following figure:
+![Integer square root](https://link.storjshare.io/s/jvlinhdvoxzdbzeatmgph6gsidrq/blogimage/monad/i_sqrt.png?wrap=0)
 
-![](https://link.storjshare.io/s/jwap57d37uzedipvsqepfe7o2yka/blogimage/monad/pure_fourthroot.png?wrap=0)
+However, as you know, this function has its limitations. It can only return numeric values, and for certain inputs like 17, an integer root does not exist. How can we address this problem? In C, we solve it by providing a function that returns the validity of the result via another *pass by reference* variable, as shown below:
+![Safe square root](https://link.storjshare.io/s/jxikev6oeihdtbjhlokyensc4erq/blogimage/monad/safesqrt.png?wrap=0)
 
-As we discussed above, we have several problem with the square root function it self, and when using it to make the fourth root, it lifts the problem to another question. How can we compose sqrt function correctly. Haskell, or more general mathermatics, has a way to do it.
-Let's say if we can some how define a type that can represent the whether the the return value of the function is integer or Nothing, we can call it `Maybe Int`. The function sigature of this function in haskell is depicted in the following diagam.
+The problem with this approach is evident: the function is impure due to the modification of the global variable `pRet`. So, what's the point? Why do we emphasize the purity of Haskell if it does not simplify our lives? Suppose we want to compute the positive fourth root, which can be expressed as:
+$$\sqrt[4]{x} = \sqrt{\sqrt{x}}$$
 
-![](https://link.storjshare.io/s/jxlruhm23j34rzyludmzjgde7mza/blogimage/monad/maybe_sqrt.png?wrap=0)
+We can implement the fourth root of an integer using the function depicted in the following block diagram:
+![Pure fourth root](https://link.storjshare.io/s/jwap57d37uzedipvsqepfe7o2yka/blogimage/monad/pure_fourthroot.png?wrap=0)
 
-Well, looking in the diagram, we can mimic the same thing in C by returning the structure that represent the Maybe Integer type, so what's the point. One more point is that we still have the input value as Integer, because we know the function sqrt has the domain (the set of the input) being the integer. Another point is that, since we don't intruduce the global variable, we keep that function to be pure, and it still keep the lazyness of the function. And finally, it have a special way to compose it to make the fourth root, it is the bind (`>>=`) operation. Let's see how we compose the i_sqrt into fourth_sqrt in the following figure.
+As previously discussed, the square root function presents several problems, which are carried forward when computing the fourth root. So, how can we correctly compose the `sqrt` function? Haskell, and mathematics in general, provide a solution.
 
-![](https://link.storjshare.io/s/juk56ofv26cewcdo7bagdbriu5qq/blogimage/monad/monad_fourthroot.png?wrap=0)
+Suppose we can define a type that represents whether the function's return value is an integer or `Nothing`. In Haskell, we call this type `Maybe Int`. The function signature for this approach is depicted in the following diagram:
+![Maybe square root](https://link.storjshare.io/s/jxlruhm23j34rzyludmzjgde7mza/blogimage/monad/maybe_sqrt.png?wrap=0)
 
-Looking at above diagram, we will see that the fourtth root function is implemented by composing 2 `i_sqrts` functions, and the way it is composed is kind of special because it does not just feeding the output of this function to the input of the another function (like the dot `(.)`operation in Haskell), but it also process the case where the first i_sqrt function being `Nothing`, the Nothing will be forward directly to the output (not thought the second `i_sqrt` box). That is exactly how the bind (`>>=`) function of the Maybe Monad is defined. Let's see below:
+Looking at the diagram, we can simulate a similar approach in C by returning a structure that represents the `Maybe Integer` type. However, what is the advantage? One crucial aspect is that we still pass an integer as the input value, as the square root function operates on integers. Another significant advantage is that by avoiding the use of global variables, the function remains pure and preserves laziness. Moreover, we can use a special composition technique known as bind (`>>=`) operation to compose functions. Let's examine how we compose `i_sqrt` into `fourth_sqrt` in the following figure:
+![Monad fourth root](https://link.storjshare.io/s/juk56ofv26cewcdo7bagdbriu5qq/blogimage/monad/monad_fourthroot.png?wrap=0)
 
-```(haskell)
- (>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b
- (>>=) m g = case m of
+Analyzing the diagram, we observe that the fourth root function is implemented by composing two `i_sqrt` functions. The composition is special because it not only passes the output of the first function as the input of the second function (like the dot `(.)` operation in Haskell), but it also handles cases where the first `i_sqrt` function yields `Nothing`. In such cases, `Nothing` is directly forwarded to the output without passing through the second `i_sqrt` box. This behavior aligns with the definition of the bind (`>>=`) function in the Maybe Monad. The Haskell definition is as follows:
+
+```haskell
+(>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b
+(>>=) m g = case m of
                    Nothing -> Nothing
                    Just x  -> g
 ```
+As we can see, the Monad is precisely defined, serving its purpose. This example highlights a few key benefits of using monads:
 
-We can see, the monad is exactly what it is defined, no less, no more, but I hope this example gives you one example of how Monad is useful, I can list a few here:
+- It facilitates function composition in a special and potentially clever way.
+- In the i_fourth_sqrt function mentioned above, the intermediate calculation after the first i_sqrt is encapsulated within the bind function. We no longer require global variables to store the state of the first i_sqrt result or any temporary variables. Additionally, we can skip the second i_sqrt block if the immediate result is Nothing, thanks to lazy evaluation.
+- Monads aid in abstracting calculations, hiding intricate details and allowing us to focus on high-level computations.
+Last- ly, while error handling is not the primary purpose of monads, they provide a useful tool for handling error cases.
 
-* It helps us to compose the function in special (and may be clever) way.
+To conclude this blog post, let's revisit the original definition of a Monad found in some textbooks:
+> A Monad is a monoid in the category of endofunctors.
 
-* If we looking on the `i_fourth_sqrt` function above, we will see that the immediate calculation after the first `i_sqrt` is wrapped within the bind function, we don't need the global variable to store the state of the first `i_sqrt` result, nor need any temporary variables. We also ignore the second `i_sqrt` block incase the first the immediate result is `Nothing`. This is because of the lazy evaluation.
+When we examine what defines a monoid, we find:
 
-* It helps to abstract our calculation, it hides the details calculation insides, but we will focus on the high level calucalation.
+- The binary operator (>>=): Composing two functors. It's worth noting that functions can be seen as instances of functors. In the square root example mentioned earlier, the endofunctor maps from the category of integers to the category of integers (the mapping from the category to itself).
+- The unit element, which in Haskell is the return function. In the i_sqrt function, the return function of the Maybe monad is Just.
+- Associativity of the bind operator.
 
-* Last but not least, handling the error case is not why the Monad is invented, it is just an use case where Monad can be used.
-  To finish this blog post, I would like to come back to the original definition of the Monad in some text book:
-  
-  > Monad is the monoid in the category of the endo functors.
+I hope this example sheds some light on the usefulness of monads. While I've only listed a few benefits here, the true power of monads extends beyond error handling. It allows for clever function composition and abstracts computations, enabling us to focus on higher-level concepts.
 
-Well, looking at what define the monoid, we will have:
-
-* the binary operator `(>>=)`: Which compose 2 functors. It worths nothing that function can be seen as an instance of the functor. In the square roots example above, the endofunctor is the mapping from category of the integer to the category of the integer (the mapping from category to itself).
-* The unit element, in haskell it is the `return` function. In the `i_sqrt` above, it is the return function of the Maybe monad, and is `Just` function.
-* They have associativity of the bind operator.
-
-* I think that is enough (for me) for this part so I will stop here not blow my own mind.
+That concludes this part of my blog post, as I fear my explanations might become convoluted if I continue.
