@@ -40,12 +40,12 @@ We observe that these characteristics align with the number zero for addition an
 
 Initially, this diagram might appear overwhelming, but after watching [Dr. Bartosz's lecture on monoids](https://www.youtube.com/watch?v=GmgoPd7VQ9Q), I gained a better understanding. In general, a monoid is defined within a category with the following morphisms:
 - $$\mu$$: M ⊗ M -> M. This represents multiplication or the binary operator, mapping a pair of objects of the same type to an object of the same type.
-- $\eta$: I -> M. Here, I denotes the unit. Although I haven't fully grasped this concept yet, I accept it for the time being and continue my search for answers.
+- $$\eta$$: I -> M. Here, I denotes the unit. Although I haven't fully grasped this concept yet, I accept it for the time being and continue my search for answers.
 
 For this particular category, the following characteristics hold:
 - Multiplication: Morphism of a pair of objects to an object. For example, the multiplication of two real numbers yields a real number.
-- Associativity: Suppose we have $\mu$ ($\mu$(x,y),z) = $\mu$ (x,$\mu$(y,z)). This equation represents the associativity of real number multiplication.
-- Identity: We have $\mu$ ($\eta$ (I), x) = $\mu$ (x,$\eta$ (I)) = x, denoted as left identity and right identity ($\lambda$ and $\rho$) in the diagram. For instance, in multiplication, the number **1** serves as the identity element.
+- Associativity: Suppose we have $$\mu$$ ($$\mu$$(x,y),z) = $$\mu$$ (x,$$\mu$$(y,z)). This equation represents the associativity of real number multiplication.
+- Identity: We have $$\mu$$ ($$\eta$$ (I), x) = $$\mu$$ (x,$$\eta$$ (I)) = x, denoted as left identity and right identity ($$\lambda$$ and $$\rho$$) in the diagram. For instance, in multiplication, the number **1** serves as the identity element.
 
 ## And Then the Monad
 
