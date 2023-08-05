@@ -39,7 +39,7 @@ We observe that these characteristics align with the number zero for addition an
 ![Monoid diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Monoid_unit_svg.svg/726px-Monoid_unit_svg.svg.png)
 
 Initially, this diagram might appear overwhelming, but after watching [Dr. Bartosz's lecture on monoids](https://www.youtube.com/watch?v=GmgoPd7VQ9Q), I gained a better understanding. In general, a monoid is defined within a category with the following morphisms:
-- $\mu$: M ⊗ M -> M. This represents multiplication or the binary operator, mapping a pair of objects of the same type to an object of the same type.
+- $$\mu$$: M ⊗ M -> M. This represents multiplication or the binary operator, mapping a pair of objects of the same type to an object of the same type.
 - $\eta$: I -> M. Here, I denotes the unit. Although I haven't fully grasped this concept yet, I accept it for the time being and continue my search for answers.
 
 For this particular category, the following characteristics hold:
