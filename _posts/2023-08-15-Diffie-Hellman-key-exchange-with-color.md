@@ -5,35 +5,31 @@ categories:
 tags:
   - Learning
 ---
-
-Diffie-Hellman key exchange with ... color.
-
-The first time when I learn about key exchange protocol, I came accross an analogy of the protocol using color mixing ([Wikipedia image](https://commons.wikimedia.org/wiki/File:Diffie-Hellman_Key_Exchange.svg)). This analogy is easy to understand, but does it actually work, ignoring the fact that it may be insecure. Let's we find our now
+The first time I learn about key exchange protocol, I came accross an analogy of the protocol using color mixing ([Wikipedia image](https://commons.wikimedia.org/wiki/File:Diffie-Hellman_Key_Exchange.svg)). This analogy is easy to understand, but does it actually work, ignoring the fact that it may be insecure. Let's we find our now
 
 # Diffie-Hellman problem
 
-Let's we define the Diffie hellman problem with color:
+Let's define the Diffie hellman problem with color:
 
 * Give `g` to be the generator of the group, in this case we chose the color `g` in the RGBA in the color space.
-* Let's define the `^` to be the one way function, that is give 2 color `x` and `y`, we can easily compute the mixed color `m=x^y`, but given the color `m`, it is "hard" to find the color which `m` is mixed from.
-* The the DHP in the color space will be: Give 2 color $X$ and $Y$, where as $X=g^x$ and $Y=g^y$, it is hard to find the color the color $$Z=(g^x)^y$$
+* Let's define the `^` to be the one way function, that is giving 2 color `x` and `y`, we can easily compute the mixed color `m=x^y`, but given the color `m`, it is "hard" to find the color which `m` is mixed from.
+* The DHP in the color space will be: Give 2 color $$X$$ and $$Y$$, where as $$X=g^x$$ and $$Y=g^y$$, it is hard to find the color the color $$Z=(g^x)^y$$
 
 It sounds logical, right? Let's take a closer look.
 
 # Color mixing algorithm
 
-For one who is not familiar with graphic processing, color in image can be represent in several way, in this post, I use the RGBA which use Reg-Green-Blue-Alpha element to represent color, and it is represented by a vector of 4 byte. Here are some example:
+For one who is not familiar with graphic processing, color in image can be represent in several way, in this post, I use the RGBA which use Red-Green-Blue-Alpha element to represent color, and it is represented by a vector of 4 byte, however, in this blog post, I ignore the Alpha channel to reduce the complexity, se let's us assume all the alpha in this blog post is `1.0`. Here are some example:
 
-<h2 style="background-color:rgba(255, 99, 71,1 );">* rgba(255, 99, 71, 255)</h2>
-<h2 style="background-color:rgba(255, 99, 71,0.4 );">* rgba(255, 99, 71, 102)</h2>
-<h2 style="background-color:rgba(32, 99, 71, 0.4);">* rgba(99, 99, 71, 102)</h2>
-<h2 style="background-color:rgba(99, 99, 250, 0.6);">* rgba(255, 99, 250, 102)</h2>
+<h2 style="background-color:rgba(255, 99, 71, 1.0 );">* rgb(255, 99, 71)</h2>
+<h2 style="background-color:rgba(32, 99, 71, 1.0);">* rgb(32, 99, 71)</h2>
+<h2 style="background-color:rgba(99, 99, 250, 1.0);">* rgb(99, 99, 250)</h2>
 
 Now we define the mix color operation, there are several one for this, but for the workable DH scheme, we will need the one that has the commutative and associative characteristic.
 
-* Option1 - Addition: C1(r1,g1,b1) ^ C2(r2,g2,b2) = Z(r1+r2, g1+g2,  b1+b2), it seems to match our imagination about the RGB color space, however, it has the problem about the saturation, our information will be lost. For instance, if one of the color in mixing is white (FFFFFF), the result is always wh/ite due to saturation.
-* Option2: average. On the surface, it is commutative, but it doesn't provide associative. So I wanna make a modification for it.
-  $$F$$ is the mix funcion which take the list of colors to produce the new color.
+* Option1 - Additive blending: C1(r1,g1,b1) ^ C2(r2,g2,b2) = Z(r1+r2, g1+g2,  b1+b2), it seems to match our imagination about the RGB color space, however, it has the problem about the saturation, our information will be lost. For instance, if one of the color in mixing is white (FFFFFF), the result is always wh/ite due to saturation.
+* Option2 - Average blending: On the surface, it is commutative, but it doesn't provide associative. So I wanna make a modification for it.
+  $$F$$ is the funcion which take the list of colors to produce the new color.
 
   $$F(color1)$$ = $$color1$$
   
@@ -41,8 +37,8 @@ Now we define the mix color operation, there are several one for this, but for t
   
   $$F(color1, color2, color3)$$ = $$(color1+color2+color3)/3$$ = $$F(color1,color2)*2/3 + F(color3)*1/3$$
   
-* Option3 - multiply blend: This is a common blend mode, the special effect of this mode is that the result is alway a color darker than 2 input colors. Here is the blend function for it
-  $F(a,b) = a.b$ where as the result in RGB-888 notation is new $Z$ color is  $Rz = Ra.Rb/255; Gz = Ga.Gb/255; Bz=Ba.Bb/255$
+* Option3 - Multiply blending: This is a common blend mode, the special effect of this mode is that the result is alway a color darker than 2 input colors. Here is the blend function for it
+  $$F(a,b) = a.b$$ where as the result in RGB-888 notation is new $$Z$$ color is  $$Rz = Ra.Rb/255; Gz = Ga.Gb/255; Bz=Ba.Bb/255$$
 
 Let's see the illustration of the color blending in different modes.
 
@@ -207,19 +203,33 @@ Let's make the key exchange between Alice and Bob, as the following table.
 </tbody>
 </table>
 
+Then, looking at the table, we can see that all 3 options produce a viable way to do the DH key exchange using color, here are some of the observations:
+* We see that Alice and Bob can create the identical color, or nearly indentical color as as shared secret. There are the minor devitation in some cases (like the `Near white` case of the Avarage blending), this is simply the rounding error when the operation involve the number devision.
+* For the Addictive blending, though the shared secret color can be obtained by both Alice and Bob, we can see that it indeed saturated to White color. Similarly, for the Multiply blending, the result can be quickly saturarted to Black color, thought it is not as easy as white color, but from the human eyes resolution, the difference betwene black and near black color is negligible.
+* If you are a good person in distinguishing color, you can see the final shared secret having some correlation with the public color.
+
 
 # Trivial security evaluation
 
-We call it trivial because all above color blending mode are not truely one way function mathematically, because the private key are easyli calculated from g color and the public key:
+We call it trivial because all above color blending mode are not truely one way function mathematically, because the private key are easily calculated from common g color and the public key, see the following:
 
-* addictive blending
-* average blending
-* Muliply blending
+* Addictive blending: We can use the color subtraction.
+* Average blending: We can use the linear interpolate or extrapolate to extract the private color.
+* Muliply blending: We can use the public color divide to common g color and we will get the private color.
 
-Thus, we only evaluate the security properties of the scheme bases on the color visualization. Let's see the following analysis:
+With that said, we don't really consider the mathematical characteristic of these operation, because it trivial to break the scheme. Thus we only evaluate the security properties of the scheme bases on the color visualization. Let's see the following analysis:
 
-* Addiction blending: we can easily see that this scheme work only if the g is near the dark color to avoid the saturation, at the same time, the private key should be chosen that it shall not cause the saturation. With that said, the result of the Color DH is always brighter color than the g and the public key itself, thus the attacker can just mix gx and gy, and brute force the color from g^x^y untill the g^x
+* Addiction blending: we can easily see that this scheme work only if the g is near the dark color to avoid the saturation, at the same time, the private key should be chosen that it shall not cause the saturation. With that said, the result of the Color DH is always brighter color than the g and the public key itself, thus the attacker can just mix gx and gy, and brute force the color from (g^x)^y to g^x.
 
 * Average blending: Well, I bieve Average blending is the most accurate interm of color visualization, because it reflect the way we mix paint in real life. The share secret it this case is a bit harder to guess, because it can be brighter and darker than the public colors.
 
 * Multiply blending: This scheme is the oposite of the Addiction blending, where it need the `g` color to be near the while color, and the result of the blending is always the darker color. Though this scheme does not cause much of the saturation problem (unless one of the serecet color is completely black - represent by `0` value), it does not represent the real color blending in reality. For instance, if we mix 2 color of the same color, the result shall be the same color in real life, but with this multiply color bleanding, we get the darker color.
+
+# Afterthought
+I have realized that using the RGB color model is not appropriate with the paint mixing analogy key exchange, since the RGB is the Addictive color model, it represent light emission. While in case of the paint mixing, paint has color X because it absort all the light of the other color than X (or it reflect and scatter the X color), thus the CMYK color model should be more appropriate. However, the blending operation would be the same, as my time is limited, I let this post as it is and I will update this post in the future to demonstrate color blending in CMYK color space.
+
+I have also read some discussion about color blending modeling in math, it seems with the current common color model, it is difficult to make the mathermatical representation of the color blending to be exact as we see in reality, because color mixing is not only about the light mixing but also the chemical reaction and biological phenomenon of the human eye. For instance, all 3 mode of color blending in our example are associative, but in reality, when we mix color (A+B) then mix with C, that result will be different from when we mix the (B+C) then mix with A, the order of paint mixing does matter in some case. During the time I write this blog post I have found these interesting post:
+  - [Colour-mixing magma by Mark Seemann](https://blog.ploeh.dk/2018/01/02/colour-mixing-magma/)
+  - [Color theory (I haven't known it exist) on Wikipeia](https://en.wikipedia.org/wiki/Color_theory)
+
+**Last but not least, this blog post is purely for entertainment + self education purpose. It may contains some oversimplified technical detail, by no mean, I am trying to propose color blending operation as a DH key exchange in the serious application.**
