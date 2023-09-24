@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: splash
 title: Calculate SHA-256 Hash from Hex or C Array Input
 ---
 
@@ -29,15 +29,16 @@ function calculateSHA256() {
   // Check if the input contains curly braces (C array syntax)
   var isCArray = inputData.includes('{') && inputData.includes('}');
 
-  // Remove curly braces and spaces for C array input
-  if (isCArray) {
-    inputData = inputData.replace(/[{}]/g, '');
-  }
+    if (isCArray) 
+    {
+        var hexString = convertCArrayToHexString(inputData)
+    }
+    else{
 
-  // Convert the cleaned-up input to a hexadecimal string
-  var hexArray = inputData.split(/[\s,{}]+/).filter(Boolean);
-  var hexString = hexArray.join('');
-
+      // Convert the cleaned-up input to a hexadecimal string
+      var hexArray = inputData.split(/[\s,{}]+/).filter(Boolean);
+      var hexString = hexArray.join('');
+    }
   // Convert the hexadecimal string to a Uint8Array
   var hexBytes = new Uint8Array(hexString.length / 2);
   for (var i = 0; i < hexString.length; i += 2) {
@@ -55,6 +56,36 @@ function calculateSHA256() {
   }).catch(function(error) {
     console.error(error);
   });
+}
+
+function convertCArrayToHexString(cArrayString) {
+  // Remove curly braces and split the string into individual values
+  const values = cArrayString
+    .replace(/[{}]/g, '') // Remove curly braces
+    .split(',')
+    .map(valStr => valStr.trim()); // Trim whitespace
+
+  // Convert and format each value as a two-digit hexadecimal string
+  const hexArray = values.map(valStr => {
+    let val;
+    if (valStr.startsWith("0x")) {
+      // Handle hexadecimal values with "0x" prefix
+      val = parseInt(valStr, 16);
+    } else {
+      // Handle decimal values
+      val = parseInt(valStr, 10);
+    }
+
+    if (isNaN(val) || val < 0 || val > 255) {
+      throw new Error('Invalid value in the C array string');
+    }
+
+    return val.toString(16).padStart(2, '0'); // Convert to hex and pad
+  });
+
+  // Join the hex values to form the hex string
+  const hexString = hexArray.join('').toUpperCase(); // Optionally convert to uppercase
+  return hexString;
 }
 
 </script>
