@@ -115,7 +115,7 @@ function convertDecHex(inStr) {
                 str.includes('0x') ?
                     (  str.length===3? parsedValues.push(str.replace('0x', '0')):
                         parsedValues.push(str.replace('0x', '')) ):
-                    (  str.length===1? parsedValues.push('0'+(+str).toString(16)):
+                    (  (+str).toString(16).length===1? parsedValues.push('0'+(+str).toString(16)):
                         parsedValues.push(((+str).toString(16))))
         }
     )
