@@ -26,6 +26,7 @@ search: true
 
 # Build settings
 markdown: kramdown
+mathjax: true
 remote_theme: tranvantruonggit/minimal-mistakes
 # Outputting
 permalink: /:categories/:title/
