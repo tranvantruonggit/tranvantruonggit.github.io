@@ -1,7 +1,7 @@
 ---
 layout: splash
 title: SHA-256 Hash from Hex string or C Array Input
-permalink: /tools/sha256/
+permalink: /tools/sha256
 ---
 <head>
     <style>
