@@ -5,11 +5,11 @@ categories:
 tags:
   - Learning
 ---
-The first time I learn about key exchange protocol, I came accross an analogy of the protocol using color mixing ([Wikipedia image](https://commons.wikimedia.org/wiki/File:Diffie-Hellman_Key_Exchange.svg)). This analogy is easy to understand, but does it actually work, ignoring the fact that it may be insecure. Let's we find our now
+The first time I learn about key exchange protocol, I came across an analogy of the protocol using color mixing ([Wikipedia image](https://commons.wikimedia.org/wiki/File:Diffie-Hellman_Key_Exchange.svg)). This analogy is easy to understand, but does it actually work, ignoring the fact that it may be insecure. Let's see now.
 
 # Diffie-Hellman problem
 
-Let's define the Diffie hellman problem with color:
+Let's define the Diffie-Hellman problem with color:
 
 * Give `g` to be the generator of the group, in this case we chose the color `g` in the RGBA in the color space.
 * Let's define the `^` to be the one way function, that is giving 2 color `x` and `y`, we can easily compute the mixed color `m=x^y`, but given the color `m`, it is "hard" to find the color which `m` is mixed from.
@@ -19,7 +19,7 @@ It sounds logical, right? Let's take a closer look.
 
 # Color mixing algorithm
 
-For one who is not familiar with graphic processing, color in image can be represent in several way, in this post, I use the RGBA which use Red-Green-Blue-Alpha element to represent color, and it is represented by a vector of 4 byte, however, in this blog post, I ignore the Alpha channel to reduce the complexity, se let's us assume all the alpha in this blog post is `1.0`. Here are some example:
+For someone who is not familiar with graphic processing, color in image can be represent in several way, in this post, I use the RGBA which use Red-Green-Blue-Alpha element to represent color, and it is represented by a vector of 4 byte, however, in this blog post, I ignore the Alpha channel to reduce the complexity, se let's assume all the alpha in this blog post is `1.0`. Here are some examples:
 
 <h2 style="background-color:rgba(255, 99, 71, 1.0 );">* rgb(255, 99, 71)</h2>
 <h2 style="background-color:rgba(32, 99, 71, 1.0);">* rgb(32, 99, 71)</h2>
@@ -204,8 +204,8 @@ Let's make the key exchange between Alice and Bob, as the following table.
 </table>
 
 Then, looking at the table, we can see that all 3 options produce a viable way to do the DH key exchange using color, here are some of the observations:
-* We see that Alice and Bob can create the identical color, or nearly indentical color as as shared secret. There are the minor devitation in some cases (like the `Near white` case of the Avarage blending), this is simply the rounding error when the operation involve the number devision.
-* For the Addictive blending, though the shared secret color can be obtained by both Alice and Bob, we can see that it indeed saturated to White color. Similarly, for the Multiply blending, the result can be quickly saturarted to Black color, thought it is not as easy as white color, but from the human eyes resolution, the difference betwene black and near black color is negligible.
+* We see that Alice and Bob can create the identical color, or nearly indentical color as as shared secret. There are the minor deviation in some cases (like the `Near white` case of the Avarage blending), this is simply the rounding error when the operation involve the number division.
+* For the Addictive blending, the shared secret color can be obtained by both Alice and Bob, we can see that it indeed saturated to White color. Similarly, for the Multiply blending, the result can be quickly saturarted to Black color, though it is not as easy as white color, but from the human eyes resolution, the difference betwene black and near black color is negligible.
 * If you are a good person in distinguishing color, you can see the final shared secret having some correlation with the public color.
 
 
@@ -221,14 +221,14 @@ With that said, we don't really consider the mathematical characteristic of thes
 
 * Addiction blending: we can easily see that this scheme work only if the g is near the dark color to avoid the saturation, at the same time, the private key should be chosen that it shall not cause the saturation. With that said, the result of the Color DH is always brighter color than the g and the public key itself, thus the attacker can just mix gx and gy, and brute force the color from (g^x)^y to g^x.
 
-* Average blending: Well, I bieve Average blending is the most accurate interm of color visualization, because it reflect the way we mix paint in real life. The share secret it this case is a bit harder to guess, because it can be brighter and darker than the public colors.
+* Average blending: Well, I believe Average blending is the most accurate interm of color visualization, because it reflect the way we mix paint in real life. The share secret it this case is a bit harder to guess, because it can be brighter and darker than the public colors.
 
-* Multiply blending: This scheme is the oposite of the Addiction blending, where it need the `g` color to be near the while color, and the result of the blending is always the darker color. Though this scheme does not cause much of the saturation problem (unless one of the serecet color is completely black - represent by `0` value), it does not represent the real color blending in reality. For instance, if we mix 2 color of the same color, the result shall be the same color in real life, but with this multiply color bleanding, we get the darker color.
+* Multiply blending: This scheme is the opposite of the Addiction blending, where it need the `g` color to be near the while color, and the result of the blending is always the darker color. Though this scheme does not cause much of the saturation problem (unless one of the serecet color is completely black - represent by `0` value), it does not represent the real color blending in reality. For instance, if we mix 2 color of the same color, the result shall be the same color in real life, but with this multiply color bleanding, we get the darker color.
 
 # Afterthought
 I have realized that using the RGB color model is not appropriate with the paint mixing analogy key exchange, since the RGB is the Addictive color model, it represent light emission. While in case of the paint mixing, paint has color X because it absort all the light of the other color than X (or it reflect and scatter the X color), thus the CMYK color model should be more appropriate. However, the blending operation would be the same, as my time is limited, I let this post as it is and I will update this post in the future to demonstrate color blending in CMYK color space.
 
-I have also read some discussion about color blending modeling in math, it seems with the current common color model, it is difficult to make the mathermatical representation of the color blending to be exact as we see in reality, because color mixing is not only about the light mixing but also the chemical reaction and biological phenomenon of the human eye. For instance, all 3 mode of color blending in our example are associative, but in reality, when we mix color (A+B) then mix with C, that result will be different from when we mix the (B+C) then mix with A, the order of paint mixing does matter in some case. During the time I write this blog post I have found these interesting post:
+I have also read some discussion about color blending modeling in math, it seems that with the current common color model, it is difficult to make the mathermatical representation of the color blending to be exact as we see in reality, because color mixing is not only about the light mixing but also the chemical reaction and biological phenomenon of the human eye. For instance, all 3 mode of color blending in our example are associative, but in reality, when we mix color (A+B) then mix with C, that result will be different from when we mix the (B+C) then mix with A, the order of paint mixing does matter in some case. During the time I write this blog post I have found these interesting post:
   - [Colour-mixing magma by Mark Seemann](https://blog.ploeh.dk/2018/01/02/colour-mixing-magma/)
   - [Color theory (I haven't known it exist) on Wikipeia](https://en.wikipedia.org/wiki/Color_theory)
 
