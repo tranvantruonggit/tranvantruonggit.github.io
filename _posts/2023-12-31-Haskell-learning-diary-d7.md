@@ -10,7 +10,7 @@ tags:
 I was busy this year, so my Haskell learning is slowing down abit, but is not a big deal, I have my whole life to learn it. Actually, I am still practicing haskell, with the application to manipulate the hex file. It seems the project expands a bit so I think of the right way to handle it instead of using the traditional make file. So I am writng about cabal in this post.
 # Cabal
 ## Installation and setup
-There are plenty ways to install cable, I prefer using WSL as a platform to learn Haskell, so it seems I have the cabal installed (maybe via ghcup), so now it's time to update it.
+There are plenty ways to install Cabal, I prefer using WSL as a platform to learn Haskell, so it seems I have the cabal installed (possibly via ghcup), so it's time to update it.
 ```shell
 > cabal install cabal-install
 ```
@@ -68,7 +68,7 @@ executable thingkell
 ```
 
 What I want to point out here is how to setup this to work with mixed **C** source code via FFI with haskell.
-## Setup testing with haskell
+## Setup testing in Cabal
 Yeah, why not leveraging the test driven development, and why not apply it from the begining. It seems testing setup in cabal is nothing more than just a separated executable file that has the test harness to the code we want to test. At the time of wrtting this blog post, I have the following folder structure of how I setup the test code for my module.
 I use the Tasty frame work to develop test, the test case organizing is intuitive, so which this setup, I can focusing on develop the test case case and run the test every time I modify the code. It worths noting that testing is all about checking the side effect, so we should prepare testing is a way that can be easily resued when we change the interal processing implementation which is normally pure.
 
@@ -110,8 +110,33 @@ prj_root_folder
 
 We can see that I have put all the core implementation inside the `src` folder, while the test artifact into the `test`folder. You will see that each folder has it own main.hs, which means that we have 2  targets in the cabal file and each one need their own main function to run.
 # Testing with `tasty`
-Then, we have finish setup the testing environment. Then, we will jump down to actually writing the test. OK, I approached the topic by desigining the test case firstly, from simple to sophisticated. I have preprapred some known-good hex file using the available hex file utility. I have tried to create several use case to vet all code I wrote in the core implementation, something like to test my logic to handle different type of hex record, such as data record, linear address record,...
+Then, we have finish setup the testing environment. Then, we will jump down to actually writing the test. OK, I approached the topic by desigining the test case firstly, from simple to sophisticated. I have preprapred some known-good hex file using the available hex file utility. I have tried to create several use case to vet all code I wrote in the core implementation, something like to test my logic to handle different type of hex record, such as data record, linear address record,... I put here some of the testing code I wrote in the `HexTest.hs` below (it is just a part of it).
+
+```haskell
+test_CollectAndMergeMemSect :: TestTree
+test_CollectAndMergeMemSect = testCase "Test collect and merge memsect" $ do
+    let hexRecord = [IntelHexRecord {ihexAddress = 0, ihexData = [], ihexRecordType = 4},
+            IntelHexRecord {ihexAddress = 4, ihexData = [1], ihexRecordType = 0},
+            IntelHexRecord {ihexAddress = 6, ihexData = [2], ihexRecordType = 0}
+            ]
+    print $ collectAndMerge2Memsect hexRecord
+
+test_ihex2MemSect :: TestTree
+test_ihex2MemSect = testCase "Convert hex file into MemSect" $ do
+    -- test
+    ihRecord <- iHex2HexRecords "test/8byte_start17.hex"
+    let preprocess = hexRecordPrependExtended $ catMaybes ihRecord
+    print $ hexChunks2MemSect preprocess
+
+test_ihex2MemSect_fffc :: TestTree
+test_ihex2MemSect_fffc = testCase "Convert hex file that crosses" $ do
+    -- test
+    ihRecord <- iHex2HexRecords "test/8byte_startFFFC.hex"
+    let preprocess = hexRecordPrependExtended $ catMaybes ihRecord
+    print $ hexChunks2MemSect preprocess
+```
 
 Well thanks to this testing, I help me to detect the problem in my code easier, I am glad that the effort figuring out the setup worths.
 
 I will finish this blog at this time, I have some incorrect logic to debug so I will make the report next time about the project I am working on.
+See you and Happy new year!
