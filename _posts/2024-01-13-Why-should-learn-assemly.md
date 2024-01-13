@@ -9,7 +9,7 @@ tags:
 {: .notice--info}
 
 
-# Tại sao kỹ sưu hệ thống nhúng nên học assembly?
+# Tại sao kỹ sư hệ thống nhúng nên học assembly?
 Tôi vốn không học ngành khoa học máy tính hay những ngành liên quan đến lập trình, nhưng may mắn tôi được học khóa kiến trúc máy tính và hợp ngữ (`Assembly`) khi còn học đại học, và may mắn hơn nữa khi tôi được học với một người thầy lớn tuổi và có nhiều kinh nghiệm với những CPU "cổ" (ví dụ như 8086). Có lẽ vì thầy lớn tuổi nên thầy đã trả qua một kỳ khi mà các ngôn ngữ cấp cao chưa mạnh, hay các MCU tại thời điểm thầy làm việc có bộ nhớ khá khiêm tốn, và thực sự thì các ứng dụng sử dụng MCU tại thời điểm đó còn chưa phức tạp như thời điểm viết bài viết này nên việc sử dụng `assembly` để lập trình ứng dụng vẫn là một công việc phổ biến và phù hợp thời ấy.
 
 Nhưng hiện giờ đã là năm 2024, khi các MCU 32-bit đã rất rẻ và có nhiều bộ nhớ, các trình biên dịch ngôn ngữ `C` (`C` compiler) đã rất phổ biến và tối ưu, thư viện hỗ trợ cho các MCU cũng đã được phát triển rất nhiều, điều này giúp cho việc lập trình nhúng trở nên dễ tiếp cận hơn. Tuy nhiên, với khoảng thời gian 10 năm làm nhúng tại nhiều công ty và được tiếp xúc với nhiều đồng nghiệp từ các bạn mới tốt ngiệp (fresher) cho tới các expert có hơn 10 năm kinh nghiệm, tôi quan sát thấy rằng những kỹ sư có kiến thức nền tảng vững vàng và hiểu biết sâu sắc về hệ thống nhúng đều có khả năng đọc, hiểu và viết chương trình `assembly`.
