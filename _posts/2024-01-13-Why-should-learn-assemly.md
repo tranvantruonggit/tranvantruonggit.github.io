@@ -53,7 +53,8 @@ What da heck? Tại sao lại không có C compiler? Tại vì co-processor này
 * Viết một chương trình xuất xung PWM bằng assembly.
 
 ## Một vài link tham khảo các khái niệm trong bài viết
-* [Memory reordering - Wikipedia](https://en.wikipedia.org/wiki/Memory_ordering))
+* [Memory reordering - Wikipedia](https://en.wikipedia.org/wiki/Memory_ordering)
 * [GCC assembly syntax](https://www.felixcloutier.com/documents/gcc-asm.html)
 * [ARM Cortex M exception Handling - Memfault](https://interrupt.memfault.com/blog/arm-cortex-m-exceptions-and-nvic)
+
 --
