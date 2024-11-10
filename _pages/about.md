@@ -15,5 +15,5 @@ Aside from my work, I also indulge in small side projects for fun, even if they 
 You might be wondering why I chose this domain name. Well, RTOS (Real-Time Operating System) is one of my favorite topics in embedded systems. When Google introduced the `.dev domain`, I saw it as a perfect opportunity to register it for myself.
 
 # What else
-On a personal note, I'm a proud owner of a mechanical keyboard and I prefer using a trackball in my office setup. Additionally, I'm a Dvorak typist. These are just a few things that easily identify me.
+On a personal note, I'm a proud owner of a mechanical keyboard and I prefer using a trackball in my office setup. Additionally, I'm a Dvorak typist. These are just a few things that easily identifies me.
 
