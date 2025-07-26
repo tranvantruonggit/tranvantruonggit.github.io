@@ -21,34 +21,74 @@ This tool calculates the public key from a private key using elliptic curve cryp
   </div>
 
   <div class="form-group">
-    <label for="privateKey"><strong>Private Key (Hex):</strong></label>
+    <label for="privateKey"><strong>Private Key A (Hex):</strong></label>
     <input type="text" id="privateKey" class="form-control" 
-           placeholder="Enter 64-character hexadecimal private key"
+           placeholder="Enter 64-character hexadecimal private key for Party A"
            maxlength="64" style="font-family: monospace;">
     <small class="form-text text-muted">Example: c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5</small>
   </div>
 
+  <div class="form-group">
+    <label for="privateKeyB"><strong>Private Key B (Hex):</strong></label>
+    <input type="text" id="privateKeyB" class="form-control" 
+           placeholder="Enter 64-character hexadecimal private key for Party B"
+           maxlength="64" style="font-family: monospace;">
+    <small class="form-text text-muted">Example: f8f8a2f43c8376ccb0871305060d7b27b0554d2cc72bccf41b2705608452f315</small>
+  </div>
+
   <div class="text-center">
-    <button type="button" onclick="loadSampleKey()" class="btn btn--info btn--small">Load Sample Key</button>
-    <button type="button" onclick="calculatePublicKey()" class="btn btn--primary">Calculate Public Key</button>
+    <button type="button" onclick="loadSampleKeys()" class="btn btn--info btn--small">Load Sample Keys</button>
+    <button type="button" onclick="calculatePublicKey()" class="btn btn--primary">Calculate Public Keys</button>
+    <button type="button" onclick="performKeyExchange()" class="btn btn--success">🔄 Key Exchange (ECDH)</button>
   </div>
 </form>
 
 <div id="results" style="margin-top: 2rem;">
-  <h3>Public Key (Uncompressed Format)</h3>
+  <h3>Public Keys (Uncompressed Format)</h3>
   
-  <div class="form-group">
-    <label for="publicKeyX"><strong>X Coordinate:</strong></label>
-    <textarea id="publicKeyX" class="form-control" readonly rows="2" 
-              placeholder="X coordinate will appear here..." 
-              style="font-family: monospace; font-size: 0.9rem;"></textarea>
+  <div class="row">
+    <div class="col-md-6">
+      <h4>Party A Public Key</h4>
+      <div class="form-group">
+        <label for="publicKeyAX"><strong>X Coordinate:</strong></label>
+        <textarea id="publicKeyAX" class="form-control" readonly rows="2" 
+                  placeholder="Party A X coordinate..." 
+                  style="font-family: monospace; font-size: 0.9rem;"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="publicKeyAY"><strong>Y Coordinate:</strong></label>
+        <textarea id="publicKeyAY" class="form-control" readonly rows="2" 
+                  placeholder="Party A Y coordinate..." 
+                  style="font-family: monospace; font-size: 0.9rem;"></textarea>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <h4>Party B Public Key</h4>
+      <div class="form-group">
+        <label for="publicKeyBX"><strong>X Coordinate:</strong></label>
+        <textarea id="publicKeyBX" class="form-control" readonly rows="2" 
+                  placeholder="Party B X coordinate..." 
+                  style="font-family: monospace; font-size: 0.9rem;"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="publicKeyBY"><strong>Y Coordinate:</strong></label>
+        <textarea id="publicKeyBY" class="form-control" readonly rows="2" 
+                  placeholder="Party B Y coordinate..." 
+                  style="font-family: monospace; font-size: 0.9rem;"></textarea>
+      </div>
+    </div>
   </div>
-
-  <div class="form-group">
-    <label for="publicKeyY"><strong>Y Coordinate:</strong></label>
-    <textarea id="publicKeyY" class="form-control" readonly rows="2" 
-              placeholder="Y coordinate will appear here..." 
-              style="font-family: monospace; font-size: 0.9rem;"></textarea>
+  
+  <div style="margin-top: 2rem;">
+    <h3>🔐 ECDH Shared Secret</h3>
+    <div class="form-group">
+      <label for="sharedSecret"><strong>Shared Secret (X Coordinate):</strong></label>
+      <textarea id="sharedSecret" class="form-control" readonly rows="2" 
+                placeholder="Shared secret will appear here after key exchange..." 
+                style="font-family: monospace; font-size: 0.9rem; background-color: #f8f9fa;"></textarea>
+      <small class="form-text text-muted">In ECDH, only the X coordinate of the shared point is typically used as the shared secret.</small>
+    </div>
   </div>
 </div>
 
@@ -137,60 +177,195 @@ function scalarMult(k, point) {
     return result;
 }
 
-function loadSampleKey() {
+function loadSampleKeys() {
     document.getElementById('privateKey').value = 'c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5';
+    document.getElementById('privateKeyB').value = 'f8f8a2f43c8376ccb0871305060d7b27b0554d2cc72bccf41b2705608452f315';
+}
+
+function updatePublicKeysDisplay(privateKeyA, privateKeyB) {
+    const publicKeyAX = document.getElementById('publicKeyAX');
+    const publicKeyAY = document.getElementById('publicKeyAY');
+    const publicKeyBX = document.getElementById('publicKeyBX');
+    const publicKeyBY = document.getElementById('publicKeyBY');
+    
+    // Calculate and display Party A public key
+    if (privateKeyA) {
+        const publicKeyAPoint = scalarMult(privateKeyA, [P256.Gx, P256.Gy]);
+        if (publicKeyAPoint) {
+            const [qax, qay] = publicKeyAPoint;
+            publicKeyAX.value = qax.toString(16).padStart(64, '0');
+            publicKeyAY.value = qay.toString(16).padStart(64, '0');
+        }
+    }
+    
+    // Calculate and display Party B public key
+    if (privateKeyB) {
+        const publicKeyBPoint = scalarMult(privateKeyB, [P256.Gx, P256.Gy]);
+        if (publicKeyBPoint) {
+            const [qbx, qby] = publicKeyBPoint;
+            publicKeyBX.value = qbx.toString(16).padStart(64, '0');
+            publicKeyBY.value = qby.toString(16).padStart(64, '0');
+        }
+    }
 }
 
 function calculatePublicKey() {
     const errorDiv = document.getElementById('error');
-    const publicKeyX = document.getElementById('publicKeyX');
-    const publicKeyY = document.getElementById('publicKeyY');
+    const publicKeyAX = document.getElementById('publicKeyAX');
+    const publicKeyAY = document.getElementById('publicKeyAY');
+    const publicKeyBX = document.getElementById('publicKeyBX');
+    const publicKeyBY = document.getElementById('publicKeyBY');
     
-    // Clear previous results
+    // Clear previous results (but NOT the shared secret)
     errorDiv.innerHTML = '';
-    publicKeyX.value = '';
-    publicKeyY.value = '';
+    publicKeyAX.value = '';
+    publicKeyAY.value = '';
+    publicKeyBX.value = '';
+    publicKeyBY.value = '';
+    // DON'T clear shared secret: document.getElementById('sharedSecret').value = '';
     
     try {
-        const privateKeyHex = document.getElementById('privateKey').value.trim();
+        const privateKeyAHex = document.getElementById('privateKey').value.trim();
+        const privateKeyBHex = document.getElementById('privateKeyB').value.trim();
         
-        // Validate input
-        if (!privateKeyHex) {
-            throw new Error('Please enter a private key');
+        let privateKeyA = null;
+        let privateKeyB = null;
+        
+        // Calculate Party A public key
+        if (privateKeyAHex) {
+            validatePrivateKey(privateKeyAHex, 'Private Key A');
+            privateKeyA = BigInt('0x' + privateKeyAHex);
+            const publicKeyAPoint = scalarMult(privateKeyA, [P256.Gx, P256.Gy]);
+            
+            if (publicKeyAPoint) {
+                const [qax, qay] = publicKeyAPoint;
+                publicKeyAX.value = qax.toString(16).padStart(64, '0');
+                publicKeyAY.value = qay.toString(16).padStart(64, '0');
+            }
         }
         
-        if (!/^[0-9a-fA-F]+$/.test(privateKeyHex)) {
-            throw new Error('Private key must contain only hexadecimal characters (0-9, a-f, A-F)');
+        // Calculate Party B public key
+        if (privateKeyBHex) {
+            validatePrivateKey(privateKeyBHex, 'Private Key B');
+            privateKeyB = BigInt('0x' + privateKeyBHex);
+            const publicKeyBPoint = scalarMult(privateKeyB, [P256.Gx, P256.Gy]);
+            
+            if (publicKeyBPoint) {
+                const [qbx, qby] = publicKeyBPoint;
+                publicKeyBX.value = qbx.toString(16).padStart(64, '0');
+                publicKeyBY.value = qby.toString(16).padStart(64, '0');
+            }
         }
-        
-        if (privateKeyHex.length !== 64) {
-            throw new Error('Private key must be exactly 64 hexadecimal characters (32 bytes) for P-256');
-        }
-        
-        const privateKey = BigInt('0x' + privateKeyHex);
-        
-        // Validate private key range
-        if (privateKey <= 0n || privateKey >= P256.n) {
-            throw new Error('Private key must be between 1 and n-1 where n is the curve order');
-        }
-        
-        // Calculate public key: Q = k * G
-        const publicKeyPoint = scalarMult(privateKey, [P256.Gx, P256.Gy]);
-        
-        if (!publicKeyPoint) {
-            throw new Error('Failed to calculate public key');
-        }
-        
-        const [qx, qy] = publicKeyPoint;
-        
-        // Convert to hex strings with proper padding
-        const qxHex = qx.toString(16).padStart(64, '0');
-        const qyHex = qy.toString(16).padStart(64, '0');
-        
-        publicKeyX.value = qxHex;
-        publicKeyY.value = qyHex;
         
     } catch (error) {
+        errorDiv.innerHTML = '<div class="notice--danger"><strong>Error:</strong> ' + error.message + '</div>';
+    }
+}
+
+function validatePrivateKey(keyHex, keyName) {
+    if (!keyHex) {
+        throw new Error(`Please enter ${keyName}`);
+    }
+    
+    if (!/^[0-9a-fA-F]+$/.test(keyHex)) {
+        throw new Error(`${keyName} must contain only hexadecimal characters (0-9, a-f, A-F)`);
+    }
+    
+    if (keyHex.length !== 64) {
+        throw new Error(`${keyName} must be exactly 64 hexadecimal characters (32 bytes) for P-256`);
+    }
+    
+    const privateKey = BigInt('0x' + keyHex);
+    if (privateKey <= 0n || privateKey >= P256.n) {
+        throw new Error(`${keyName} must be between 1 and n-1 where n is the curve order`);
+    }
+}
+
+function performKeyExchange() {
+    const errorDiv = document.getElementById('error');
+    const sharedSecretField = document.getElementById('sharedSecret');
+    
+    // Debug: Check if we can find the shared secret field
+    console.log('Shared secret field found:', !!sharedSecretField);
+    if (!sharedSecretField) {
+        console.error('Could not find sharedSecret element!');
+        return;
+    }
+    
+    // Clear previous error
+    errorDiv.innerHTML = '';
+    sharedSecretField.value = '';
+    
+    try {
+        const privateKeyAHex = document.getElementById('privateKey').value.trim();
+        const privateKeyBHex = document.getElementById('privateKeyB').value.trim();
+        
+        // Validate both private keys
+        validatePrivateKey(privateKeyAHex, 'Private Key A');
+        validatePrivateKey(privateKeyBHex, 'Private Key B');
+        
+        const privateKeyA = BigInt('0x' + privateKeyAHex);
+        const privateKeyB = BigInt('0x' + privateKeyBHex);
+        
+        console.log('Private Key A:', privateKeyAHex);
+        console.log('Private Key B:', privateKeyBHex);
+        
+        // Calculate public keys first
+        const publicKeyA = scalarMult(privateKeyA, [P256.Gx, P256.Gy]);
+        const publicKeyB = scalarMult(privateKeyB, [P256.Gx, P256.Gy]);
+        
+        if (!publicKeyA || !publicKeyB) {
+            throw new Error('Failed to calculate public keys');
+        }
+        
+        console.log('Public Key A:', publicKeyA[0].toString(16), publicKeyA[1].toString(16));
+        console.log('Public Key B:', publicKeyB[0].toString(16), publicKeyB[1].toString(16));
+        
+        // Perform ECDH: 
+        // Party A calculates: sharedSecret = privateKeyA * publicKeyB
+        // Party B calculates: sharedSecret = privateKeyB * publicKeyA
+        // Both should get the same result
+        const sharedSecretA = scalarMult(privateKeyA, publicKeyB);
+        const sharedSecretB = scalarMult(privateKeyB, publicKeyA);
+        
+        console.log('Shared Secret A:', sharedSecretA ? sharedSecretA[0].toString(16) : 'null');
+        console.log('Shared Secret B:', sharedSecretB ? sharedSecretB[0].toString(16) : 'null');
+        
+        if (!sharedSecretA || !sharedSecretB) {
+            throw new Error('Failed to calculate shared secret. Check browser console for details.');
+        }
+        
+        // Verify both parties get the same shared secret
+        if (sharedSecretA[0] !== sharedSecretB[0] || sharedSecretA[1] !== sharedSecretB[1]) {
+            throw new Error(`Shared secret mismatch! A: ${sharedSecretA[0].toString(16)}, B: ${sharedSecretB[0].toString(16)}`);
+        }
+        
+        console.log('ECDH calculation successful. Both parties have matching shared secrets.');
+        console.log('Shared secret point:', sharedSecretA[0].toString(16), sharedSecretA[1].toString(16));
+        
+        // Display the shared secret (typically only X coordinate is used)
+        const sharedSecretHex = sharedSecretA[0].toString(16).padStart(64, '0');
+        
+        // Set the shared secret first, before updating public keys
+        sharedSecretField.value = sharedSecretHex;
+        
+        // Update public keys display (but don't clear the shared secret)
+        updatePublicKeysDisplay(privateKeyA, privateKeyB);
+        
+        // Additional debug to ensure the field is being set
+        console.log('Setting shared secret field to:', sharedSecretHex);
+        console.log('Shared secret field element:', sharedSecretField);
+        console.log('Field value after setting:', sharedSecretField.value);
+        console.log('Field innerHTML after setting:', sharedSecretField.innerHTML);
+        
+        // Also update public keys if they weren't calculated yet
+        calculatePublicKey();
+        
+        // Add success message
+        errorDiv.innerHTML = '<div class="notice--success"><strong>Success!</strong> ECDH key exchange completed. Both parties now share the same secret.</div>';
+        
+    } catch (error) {
+        console.error('ECDH Error:', error);
         errorDiv.innerHTML = '<div class="notice--danger"><strong>Error:</strong> ' + error.message + '</div>';
     }
 }
@@ -201,7 +376,30 @@ document.getElementById('privateKey').addEventListener('keypress', function(e) {
         calculatePublicKey();
     }
 });
+
+document.getElementById('privateKeyB').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        calculatePublicKey();
+    }
+});
 </script>
+
+## ECDH Key Exchange
+
+The Elliptic Curve Diffie-Hellman (ECDH) key exchange allows two parties to establish a shared secret over an insecure channel:
+
+1. **Party A** generates private key `a` and calculates public key `A = a × G`
+2. **Party B** generates private key `b` and calculates public key `B = b × G`
+3. Both parties exchange their public keys
+4. **Party A** calculates shared secret: `S = a × B`
+5. **Party B** calculates shared secret: `S = b × A`
+6. Both parties arrive at the same shared secret `S = a × b × G`
+
+### Security Properties
+
+- The shared secret cannot be derived by an eavesdropper who only knows the public keys
+- Based on the computational difficulty of the Elliptic Curve Discrete Logarithm Problem (ECDLP)
+- The X coordinate of the shared point is typically used as the shared secret for further cryptographic operations
 
 ## How It Works
 
