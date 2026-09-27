@@ -1,4 +1,5 @@
 //! Integer core of the programmer calculator at /tools/hexcalc.
+//! The FIN (decimal, fixed-point) mode lives in `fin`.
 //!
 //! All values are carried as u64 (JS sees them as BigInt through the i64 ABI).
 //! `w` is the active word size (8/16/32/64); every result is masked to it and
@@ -7,6 +8,8 @@
 #![no_std]
 
 use core::ptr::addr_of_mut;
+
+mod fin;
 
 #[cfg(target_arch = "wasm32")]
 #[panic_handler]
@@ -34,10 +37,10 @@ pub const ERR_OVERFLOW: u32 = 3;
 pub const ERR_BAD_DIGIT: u32 = 4;
 
 /// 64 binary digits + sign fits comfortably.
-const BUF_LEN: usize = 72;
+pub(crate) const BUF_LEN: usize = 72;
 
 static mut ERR: u32 = ERR_OK;
-static mut BUF: [u8; BUF_LEN] = [0; BUF_LEN];
+pub(crate) static mut BUF: [u8; BUF_LEN] = [0; BUF_LEN];
 
 #[inline(always)]
 fn width(w: u32) -> u32 {
@@ -65,7 +68,7 @@ fn sext(v: u64, w: u32) -> i64 {
 }
 
 #[inline(always)]
-fn set_err(e: u32) {
+pub(crate) fn set_err(e: u32) {
     unsafe { ERR = e };
 }
 
